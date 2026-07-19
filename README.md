@@ -1,6 +1,12 @@
 # Card Wallet — a single-file, offline loyalty card organiser
 
-See it here: https://yshashank.github.io/offline-card-wallet/card-wallet.html
+## 🚀 Get Started
+
+* **[Live Demo / Interactive Template](https://yshashank.github.io/offline-card-wallet/card-wallet.html)**  
+  *(Open this to see how it works, then use the "Download my copy" button inside the page)*
+
+* **[Download card-wallet.html directly](https://raw.githubusercontent.com/yshashank/offline-card-wallet/main/card-wallet.html)**  
+  *(Right-click this link and select "Save Link As..." to download the file to your device)*
 
 **One HTML file. No app, no account, no cloud, no tracking. Your data never leaves your device.**
 
