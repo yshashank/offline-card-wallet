@@ -9,11 +9,12 @@ Card Wallet keeps all your loyalty cards, membership numbers, and points balance
 ## Screenshots
 
 <p>
-  <img src="artifacts/mobile-home.png" width="240" alt="Mobile home view: cards grouped by category with expiry and points-freshness chips">
-<img src="artifacts/card-detail.png" width="240" alt="Card detail view: copy buttons, tap-to-dial and tap-to-email links">
-<img src="artifacts/qr-view.png" width="240" alt="QR view: large scannable code with the number in giant type">
-<img src="artifacts/desktop.png" width="720" alt="Desktop view: multi-column card grid">
+  <img src="aritfacts/mobile-home.png" width="240" alt="Mobile home view: cards grouped by category with expiry and points-freshness chips">
+  <img src="aritfacts/card-detail.png" width="240" alt="Card detail view: copy buttons, tap-to-dial and tap-to-email links">
+  <img src="aritfacts/qr-view.png" width="240" alt="QR view: large scannable code with the number in giant type">
 </p>
+
+<img src="aritfacts/desktop.png" width="720" alt="Desktop view: multi-column card grid">
 
 ## Features
 
