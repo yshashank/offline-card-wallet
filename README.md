@@ -16,14 +16,14 @@ Card Wallet keeps all your loyalty cards, membership numbers, and points balance
 - **Points freshness tiers** — balances show bright green if updated within 30 days, muted at 31–90 days, and amber "update due" beyond 90 days, nudging a monthly refresh habit.
 - **Search** across programs, numbers, names, and notes.
 - **Read-only by default** — an explicit Edit mode prevents accidental changes during everyday browsing.
-- **CSV export** — one tap produces an Excel-compatible snapshot (long card numbers survive Excel intact).
+- **CSV export** — one tap produces an Excel-compatible snapshot. Card numbers are deliberately wrapped as `="…"` in the CSV — that formula wrapper is what stops Excel mangling long numbers into scientific notation, so leave it as-is.
 - **Built-in guide** — a collapsed "How to update this wallet" section at the bottom covers the update routine and even how to add new fields.
 
 ## Quick start
 
 1. **Download** `card-wallet.html` (right-click → Save link as, or use the download button on the release page).
 2. **Open it** in any browser — double-click on desktop, or open from your Files app / Drive on mobile.
-3. Tap **Edit**, delete the sample card, and add your own.
+3. Tap **Edit**, delete the three TEMPLATE cards (they exist to demonstrate the freshness and expiry indicators), and add your own.
 4. Press **Save file** — a fresh copy downloads with your data inside. **Replace your old copy with it.** This step is the actual save.
 5. Store the file wherever you like: local disk, Google Drive, OneDrive, a NAS. Opening it from a cloud drive gives you access on every device.
 
@@ -39,7 +39,8 @@ These are the honest limitations of the single-file design. They're the price of
 6. **The QR encodes the raw number only.** Some store scanners read only 1D barcodes, and some loyalty apps use proprietary QR payloads — in those cases show staff the large number, or use the brand's own app/wallet pass for scanning.
 7. **Backups are your job.** Cloud-drive version history (Google Drive: right-click → Manage versions) is your undo button. A periodic CSV export is a cheap second parachute.
 8. **Modern browsers only.** Built and tested for current Chrome, Edge, Safari, and Firefox (2023+). Very old browsers or exotic webviews may not render it correctly.
-9. **No warranty.** This is free software provided as-is (MIT License). Verify your own data; the authors accept no liability for lost points, expired cards, or missed renewals.
+9. **Don't put your data in a public fork.** If you fork this repository and edit the JSON block on GitHub, your card numbers become publicly readable. The app shows a warning banner when opened from a web address for exactly this reason — download the file and keep your copy private.
+10. **No warranty.** This is free software provided as-is (MIT License). Verify your own data; the authors accept no liability for lost points, expired cards, or missed renewals.
 
 ## Suggested routine
 
@@ -57,5 +58,5 @@ This file makes **zero network requests**. No analytics, no fonts, no CDNs, no t
 
 ## Credits & license
 
-- Card Wallet is released by Shashank Murthy under the **MIT License** — free to use, copy, modify, and redistribute.
+- Card Wallet is released under the **MIT License** — free to use, copy, modify, and redistribute.
 - QR code generation by [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator), © 2009 Kazuhiko Arase, MIT License. "QR Code" is a registered trademark of DENSO WAVE INCORPORATED.
