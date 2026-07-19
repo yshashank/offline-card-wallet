@@ -8,7 +8,7 @@
   :root{
     --paper:#F3F5F1;
     --ink:#182430;
-    --muted:#5B6B77;
+    --muted:#4A5560;
     --line:#DCE2DA;
     --surface:#FFFFFF;
     --danger:#B3392F;
@@ -131,6 +131,25 @@
     font-size:12.5px;font-weight:700;color:var(--focus);padding:0 13px;flex-shrink:0;
   }
 
+  /* ---------- Hosted-copy notice ---------- */
+  #hosted-note{
+    margin:14px 16px 0;padding:12px 16px;
+    background:#F7EDD6;border:1px solid #E8D6A8;border-radius:var(--radius);
+    color:#6B5312;font-size:13.5px;line-height:1.5;
+  }
+  #hosted-note[hidden]{display:none}
+  #hosted-note button{
+    display:inline-block;margin-top:8px;background:var(--ink);color:#fff;
+    border-radius:999px;padding:7px 16px;font-weight:700;font-size:13px;
+  }
+  @media(min-width:992px){#hosted-note{max-width:928px;margin-left:auto;margin-right:auto}}
+
+  /* ---------- Expanded touch targets (visuals unchanged) ---------- */
+  .copy-btn,.close-x,.today-btn,.cat-actions button{position:relative}
+  .copy-btn::after,.close-x::after,.today-btn::after,.cat-actions button::after{
+    content:"";position:absolute;inset:-10px -6px;
+  }
+
   .empty-cat{
     margin-top:10px;border:1.5px dashed var(--line);border-radius:var(--radius);
     padding:18px;text-align:center;color:var(--muted);font-size:13.5px;
@@ -249,19 +268,49 @@
   ],
   "cards": [
     {
-      "id": "card-sample",
+      "id": "card-tpl-air",
       "categoryId": "cat-air",
-      "programName": "Sample \u2014 Airline Rewards (delete me)",
+      "programName": "TEMPLATE \u2014 Airline Rewards (delete me)",
       "nameOnCard": "A. Traveller",
       "cardNumber": "1234567890123456",
       "expiry": "2027-03-31",
       "mobile": "+91 98765 43210",
       "email": "sample@example.com",
       "points": 12500,
-      "pointsAsOn": "2026-07-01",
+      "pointsAsOn": "2026-07-10",
       "tier": "Gold",
       "website": "https://example.com",
-      "notes": "Example card showing the expected format. Open Edit mode and delete it."
+      "notes": "A recently-updated card: the points chip shows bright green because the balance is fresh (under 30 days old)."
+    },
+    {
+      "id": "card-tpl-retail",
+      "categoryId": "cat-retail",
+      "programName": "TEMPLATE \u2014 Supermart Rewards (delete me)",
+      "nameOnCard": "A. Traveller",
+      "cardNumber": "8844129906551234",
+      "expiry": "",
+      "mobile": "+91 98765 43210",
+      "email": "sample@example.com",
+      "points": 58240,
+      "pointsAsOn": "2026-05-15",
+      "tier": "Platinum",
+      "website": "https://example.com",
+      "notes": "A points-heavy card with no expiry. Its balance is 31\u201390 days old, so the points chip shows muted."
+    },
+    {
+      "id": "card-tpl-lounge",
+      "categoryId": "cat-lounge",
+      "programName": "TEMPLATE \u2014 Lounge Access (delete me)",
+      "nameOnCard": "A. Traveller",
+      "cardNumber": "7001234567",
+      "expiry": "2026-08-30",
+      "mobile": "",
+      "email": "sample@example.com",
+      "points": 6,
+      "pointsAsOn": "2026-03-01",
+      "tier": "",
+      "website": "",
+      "notes": "This card demonstrates the warnings: expiry within 60 days shows amber, and a balance older than 90 days shows an update-due chip. Delete all three TEMPLATE cards, then add your own."
     }
   ]
 }
@@ -277,6 +326,11 @@
     <input id="search" type="search" placeholder="Search programs, numbers, notes&hellip;" autocomplete="off">
   </div>
 </header>
+
+<div id="hosted-note" hidden>
+  <b>You're viewing a hosted copy.</b> Don't store personal card data in a public copy (such as a GitHub fork) &mdash; anyone on the internet can read it. Download the file and use it privately on your own device instead.
+  <br><button id="get-copy-btn">Download my copy</button>
+</div>
 
 <div class="summary" id="summary"></div>
 
@@ -301,7 +355,7 @@
         <li>For each flagged card: open it &rarr; <b>Edit card</b> &rarr; refresh the points balance and set <b>Points as on</b> to today. Add any new cards, delete dead programs.</li>
         <li>Press <b>Save file</b> (it turns red whenever there are unsaved changes). A fresh copy of this file downloads, named after the wallet (e.g. <code>family-card-wallet.html</code>), with all your data inside it.</li>
         <li><b>Replace the old copy</b> in Google Drive / NAS with the downloaded file. This step is the actual save &mdash; edits live only in the browser until you do it.</li>
-        <li>Optional: <b>Export CSV</b> for an offline Excel-readable snapshot (card numbers are formatted so Excel keeps all digits).</li>
+        <li>Optional: <b>Export CSV</b> for an offline Excel-readable snapshot. Card numbers are deliberately wrapped as <code>=&quot;&hellip;&quot;</code> in the CSV &mdash; that formula wrapper is what stops Excel mangling long numbers into scientific notation, so leave it as-is.</li>
       </ol>
       <p><b>Rollback:</b> Google Drive keeps version history on the file &mdash; right-click &rarr; Manage versions. The NAS mirror is your second line.</p>
 
@@ -710,9 +764,14 @@ function renameCategory(id){
 function deleteCategory(id){
   var cat = catById(id); if (!cat) return;
   var n = state.cards.filter(function(c){ return c.categoryId === id; }).length;
-  var msg = n ? 'Delete "' + cat.name + '" and its ' + n + ' card(s)? This cannot be undone within this session.'
-              : 'Delete empty category "' + cat.name + '"?';
-  if (!confirm(msg)) return;
+  if (n > 0){
+    var typed = prompt('This permanently deletes "' + cat.name + '" and its ' + n + ' card(s).\n\nType the category name to confirm:');
+    if (typed == null) return;
+    if (typed.trim().toLowerCase() !== cat.name.trim().toLowerCase()){
+      toast("Name didn't match \u2014 nothing deleted");
+      return;
+    }
+  } else if (!confirm('Delete empty category "' + cat.name + '"?')) return;
   state.categories = state.categories.filter(function(c){ return c.id !== id; });
   state.cards = state.cards.filter(function(c){ return c.categoryId !== id; });
   markDirty(); render();
@@ -728,12 +787,38 @@ function deleteCard(id){
 }
 
 /* ---- Save file (self-serialization) ---- */
+function sanitizeTemplate(tpl){
+  /* Strip browser-extension debris (dark mode, grammar, translator tools)
+     that may have been injected before this script captured the template. */
+  try {
+    var doc = new DOMParser().parseFromString(tpl, "text/html");
+    Array.prototype.slice.call(doc.querySelectorAll("*")).forEach(function(el){
+      if (el.tagName.indexOf("-") !== -1 && el.parentNode) el.parentNode.removeChild(el);
+    });
+    Array.prototype.slice.call(doc.querySelectorAll("script,style,link")).forEach(function(el){
+      var t = el.textContent || "";
+      var ours = el.id === "wallet-data" ||
+        t.indexOf("--paper") !== -1 ||
+        t.indexOf("Kazuhiko Arase") !== -1 ||
+        t.indexOf("sanitizeTemplate") !== -1;
+      if (!ours && el.parentNode) el.parentNode.removeChild(el);
+    });
+    var h = doc.documentElement;
+    Array.prototype.slice.call(h.attributes).forEach(function(a){ if (a.name !== "lang") h.removeAttribute(a.name); });
+    Array.prototype.slice.call(doc.body.attributes).forEach(function(a){ doc.body.removeAttribute(a.name); });
+    var out = "<!DOCTYPE html>\n" + h.outerHTML;
+    return out.indexOf('id="wallet-data"') !== -1 ? out : tpl;
+  } catch(e){ return tpl; }
+}
 function buildFileText(){
   var json = JSON.stringify(state, null, 2).replace(/<\//g, "<\\/");
-  var start = TEMPLATE.indexOf(DATA_OPEN);
-  var end = TEMPLATE.indexOf(DATA_CLOSE, start);
-  if (start === -1 || end === -1) return null;
-  return TEMPLATE.slice(0, start + DATA_OPEN.length) + "\n" + json + "\n" + TEMPLATE.slice(end);
+  var tpl = sanitizeTemplate(TEMPLATE);
+  var mark = tpl.indexOf('id="wallet-data"');
+  if (mark === -1) return null;
+  var openEnd = tpl.indexOf(">", mark);
+  var end = tpl.indexOf(DATA_CLOSE, openEnd);
+  if (openEnd === -1 || end === -1) return null;
+  return tpl.slice(0, openEnd + 1) + "\n" + json + "\n" + tpl.slice(end);
 }
 function download(filename, text, mime){
   var blob = new Blob([text], { type: mime });
@@ -780,8 +865,7 @@ function exportCSV(){
 document.addEventListener("click", function(e){
   var t = e.target.closest("[data-act],[data-copy]");
   if (!t) {
-    //REMOVED: if (e.target === $("overlay")) closeSheet();
-    //This prevents accidental closing when clicking outside the form
+    if (e.target === $("overlay")) closeSheet();
     return;
   }
   if (t.hasAttribute("data-copy")){ copyText(t.getAttribute("data-copy"), t); return; }
@@ -826,6 +910,14 @@ $("search").addEventListener("input", function(){
 window.addEventListener("beforeunload", function(e){
   if (dirty){ e.preventDefault(); e.returnValue = ""; }
 });
+
+if (/^https?:$/.test(location.protocol)){
+  var hostedNote = $("hosted-note");
+  if (hostedNote){
+    hostedNote.hidden = false;
+    $("get-copy-btn").addEventListener("click", saveFile);
+  }
+}
 
 render();
 })();
