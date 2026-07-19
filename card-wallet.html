@@ -865,7 +865,8 @@ function exportCSV(){
 document.addEventListener("click", function(e){
   var t = e.target.closest("[data-act],[data-copy]");
   if (!t) {
-    if (e.target === $("overlay")) closeSheet();
+    // REMOVED: if (e.target === $("overlay")) closeSheet();
+    //This prevents accidental closing when clicking outside the form
     return;
   }
   if (t.hasAttribute("data-copy")){ copyText(t.getAttribute("data-copy"), t); return; }
