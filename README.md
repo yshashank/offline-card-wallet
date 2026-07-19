@@ -2,9 +2,17 @@
 
 **One HTML file. No app, no account, no cloud, no tracking. Your data never leaves your device.**
 
-Try it live: https://yshashank.github.io/offline-card-wallet/card-wallet.html
-
 Card Wallet keeps all your loyalty cards, membership numbers, and points balances in a single self-contained HTML file (~57 KB) that opens in any browser — phone, tablet, or laptop — and works fully offline. Your data is stored *inside the file itself*, so your copy of the file **is** your database, your backup, and your app, all at once.
+
+## Screenshots
+
+<p>
+  <img src="docs/screenshots/mobile-home.png" width="240" alt="Mobile home view: cards grouped by category with expiry and points-freshness chips">
+  <img src="docs/screenshots/card-detail.png" width="240" alt="Card detail view: copy buttons, tap-to-dial and tap-to-email links">
+  <img src="docs/screenshots/qr-view.png" width="240" alt="QR view: large scannable code with the number in giant type">
+</p>
+
+<img src="docs/screenshots/desktop.png" width="720" alt="Desktop view: multi-column card grid">
 
 ## Features
 
@@ -16,6 +24,7 @@ Card Wallet keeps all your loyalty cards, membership numbers, and points balance
 - **Points freshness tiers** — balances show bright green if updated within 30 days, muted at 31–90 days, and amber "update due" beyond 90 days, nudging a monthly refresh habit.
 - **Search** across programs, numbers, names, and notes.
 - **Read-only by default** — an explicit Edit mode prevents accidental changes during everyday browsing.
+- **Import / Export** — move your data into a new app version in seconds: Import reads either an exported JSON backup **or a previous wallet HTML file directly**, so upgrading never means re-typing your cards.
 - **CSV export** — one tap produces an Excel-compatible snapshot. Card numbers are deliberately wrapped as `="…"` in the CSV — that formula wrapper is what stops Excel mangling long numbers into scientific notation, so leave it as-is.
 - **Built-in guide** — a collapsed "How to update this wallet" section at the bottom covers the update routine and even how to add new fields.
 
@@ -51,6 +60,10 @@ A ~10-minute monthly pass keeps it trustworthy: open the file, act on whatever t
 - **Rename the wallet** (Edit mode → Rename wallet) — the saved filename automatically follows the new name.
 - **Add or rename categories** freely; each gets its own accent colour.
 - **Add new fields** — the built-in guide documents the five small edits needed, or open the file with any AI coding assistant and ask. Existing data carries over untouched.
+
+## Upgrading without losing data
+
+When a new version of Card Wallet is released: download it, open it, tap **Edit → Import data**, and select your old wallet HTML file (the app extracts your data straight out of it — an exported JSON backup works too). Confirm, press **Save file**, and replace your master copy. Your data carries over untouched.
 
 ## Privacy statement
 
