@@ -1,5 +1,7 @@
 # Card Wallet — a single-file, offline loyalty card organiser
 
+See it here: https://yshashank.github.io/offline-card-wallet/
+
 **One HTML file. No app, no account, no cloud, no tracking. Your data never leaves your device.**
 
 Card Wallet keeps all your loyalty cards, membership numbers, and points balances in a single self-contained HTML file (~57 KB) that opens in any browser — phone, tablet, or laptop — and works fully offline. Your data is stored *inside the file itself*, so your copy of the file **is** your database, your backup, and your app, all at once.
@@ -7,12 +9,11 @@ Card Wallet keeps all your loyalty cards, membership numbers, and points balance
 ## Screenshots
 
 <p>
-  <img src="docs/screenshots/mobile-home.png" width="240" alt="Mobile home view: cards grouped by category with expiry and points-freshness chips">
-  <img src="docs/screenshots/card-detail.png" width="240" alt="Card detail view: copy buttons, tap-to-dial and tap-to-email links">
-  <img src="docs/screenshots/qr-view.png" width="240" alt="QR view: large scannable code with the number in giant type">
+  <img src="artifacts/mobile-home.png" width="240" alt="Mobile home view: cards grouped by category with expiry and points-freshness chips">
+<img src="artifacts/card-detail.png" width="240" alt="Card detail view: copy buttons, tap-to-dial and tap-to-email links">
+<img src="artifacts/qr-view.png" width="240" alt="QR view: large scannable code with the number in giant type">
+<img src="artifacts/desktop.png" width="720" alt="Desktop view: multi-column card grid">
 </p>
-
-<img src="docs/screenshots/desktop.png" width="720" alt="Desktop view: multi-column card grid">
 
 ## Features
 
