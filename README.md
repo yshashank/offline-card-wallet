@@ -2,6 +2,8 @@
 
 **One HTML file. No app, no account, no cloud, no tracking. Your data never leaves your device.**
 
+Try it live: https://yshashank.github.io/offline-card-wallet/card-wallet.html
+
 Card Wallet keeps all your loyalty cards, membership numbers, and points balances in a single self-contained HTML file (~57 KB) that opens in any browser — phone, tablet, or laptop — and works fully offline. Your data is stored *inside the file itself*, so your copy of the file **is** your database, your backup, and your app, all at once.
 
 ## Features
