@@ -259,7 +259,8 @@
 
 <script type="application/json" id="wallet-data">
 {
-  "walletName": "Family Card Wallet",
+  "schemaVersion": 1,
+  "walletName": "SPRI Family Card Wallet",
   "categories": [
     {"id": "cat-air", "name": "Airlines", "accent": "#2F6DB3"},
     {"id": "cat-retail", "name": "Retail Stores", "accent": "#C7712E"},
@@ -268,49 +269,19 @@
   ],
   "cards": [
     {
-      "id": "card-tpl-air",
+      "id": "card-sample",
       "categoryId": "cat-air",
-      "programName": "TEMPLATE \u2014 Airline Rewards (delete me)",
-      "nameOnCard": "A. Traveller",
+      "programName": "Sample \u2014 Maharaja Club (delete me)",
+      "nameOnCard": "Shashank Murthy",
       "cardNumber": "1234567890123456",
       "expiry": "2027-03-31",
-      "mobile": "+91 98765 43210",
-      "email": "sample@example.com",
+      "mobile": "+91 98XXXXXXXX",
+      "email": "yshashank@gmail.com",
       "points": 12500,
-      "pointsAsOn": "2026-07-10",
+      "pointsAsOn": "2026-07-01",
       "tier": "Gold",
-      "website": "https://example.com",
-      "notes": "A recently-updated card: the points chip shows bright green because the balance is fresh (under 30 days old)."
-    },
-    {
-      "id": "card-tpl-retail",
-      "categoryId": "cat-retail",
-      "programName": "TEMPLATE \u2014 Supermart Rewards (delete me)",
-      "nameOnCard": "A. Traveller",
-      "cardNumber": "8844129906551234",
-      "expiry": "",
-      "mobile": "+91 98765 43210",
-      "email": "sample@example.com",
-      "points": 58240,
-      "pointsAsOn": "2026-05-15",
-      "tier": "Platinum",
-      "website": "https://example.com",
-      "notes": "A points-heavy card with no expiry. Its balance is 31\u201390 days old, so the points chip shows muted."
-    },
-    {
-      "id": "card-tpl-lounge",
-      "categoryId": "cat-lounge",
-      "programName": "TEMPLATE \u2014 Lounge Access (delete me)",
-      "nameOnCard": "A. Traveller",
-      "cardNumber": "7001234567",
-      "expiry": "2026-08-30",
-      "mobile": "",
-      "email": "sample@example.com",
-      "points": 6,
-      "pointsAsOn": "2026-03-01",
-      "tier": "",
-      "website": "",
-      "notes": "This card demonstrates the warnings: expiry within 60 days shows amber, and a balance older than 90 days shows an update-due chip. Delete all three TEMPLATE cards, then add your own."
+      "website": "https://www.airindia.com",
+      "notes": "Example card showing the expected format. Open Edit mode and delete it."
     }
   ]
 }
@@ -340,8 +311,11 @@
 <div class="footer-actions">
   <button class="hd-btn edit-only" id="add-cat-btn">+ Add category</button>
   <button class="hd-btn edit-only" id="rename-wallet-btn">Rename wallet</button>
+  <button class="hd-btn edit-only" id="import-btn">Import data</button>
+  <button class="hd-btn edit-only" id="export-data-btn">Export data</button>
   <button class="hd-btn" id="export-csv-btn">Export CSV</button>
 </div>
+<input type="file" id="import-input" accept=".json,.html,application/json,text/html" hidden>
 
 <div class="guide">
   <details>
@@ -353,7 +327,7 @@
         <li>Open the file and check the summary strip at the top &mdash; it flags <b>expired</b> cards, cards <b>expiring within 60 days</b>, and points balances <b>more than 90 days old</b> ("update due").</li>
         <li>Tap <b>Edit</b> (top right). Edit mode stays off by default so day-to-day browsing can't change anything.</li>
         <li>For each flagged card: open it &rarr; <b>Edit card</b> &rarr; refresh the points balance and set <b>Points as on</b> to today. Add any new cards, delete dead programs.</li>
-        <li>Press <b>Save file</b> (it turns red whenever there are unsaved changes). A fresh copy of this file downloads, named after the wallet (e.g. <code>family-card-wallet.html</code>), with all your data inside it.</li>
+        <li>Press <b>Save file</b> (it turns red whenever there are unsaved changes). A fresh copy of this file downloads, named after the wallet (e.g. <code>spri-family-card-wallet.html</code>), with all your data inside it.</li>
         <li><b>Replace the old copy</b> in Google Drive / NAS with the downloaded file. This step is the actual save &mdash; edits live only in the browser until you do it.</li>
         <li>Optional: <b>Export CSV</b> for an offline Excel-readable snapshot. Card numbers are deliberately wrapped as <code>=&quot;&hellip;&quot;</code> in the CSV &mdash; that formula wrapper is what stops Excel mangling long numbers into scientific notation, so leave it as-is.</li>
       </ol>
@@ -366,6 +340,15 @@
         <li>Loyalty and membership numbers only. Never store payment card numbers, PINs, passwords, CVVs, or OTP seeds here &mdash; those belong in the password manager.</li>
         <li>Share via Drive permissions to specific family accounts only; never via public link or email attachment.</li>
       </ul>
+
+      <h4>Upgrading to a new version (keep your data)</h4>
+      <ol>
+        <li>Download the new version of the wallet file.</li>
+        <li>Open it, tap <b>Edit</b> &rarr; <b>Import data</b>.</li>
+        <li>Select your <b>old wallet HTML file</b> (or an exported wallet-data JSON) &mdash; the app extracts your data from either. Confirm the replace prompt.</li>
+        <li>Press <b>Save file</b> and replace your master copy with the download. Done &mdash; no re-typing.</li>
+      </ol>
+      <p><b>Export data</b> produces a small JSON backup of everything; keep an occasional copy alongside your CSV exports as a second parachute.</p>
 
       <h4>Adding a new field in future (e.g. "Nominee")</h4>
       <p>Easiest path: upload this file to Claude and say <i>"add a field called X to my card wallet"</i> &mdash; existing data carries over untouched. To do it by hand, open the file in a text editor and make five small edits, using the existing <code>nameOnCard</code> field as the pattern to copy:</p>
@@ -413,6 +396,7 @@ try {
 }
 if (!state.categories) state.categories = [];
 if (!state.cards) state.cards = [];
+if (!state.schemaVersion) state.schemaVersion = 1;
 
 var ACCENTS = ["#2F6DB3","#C7712E","#7A4E8C","#2E8A5C","#A63D5F","#3D7C8A","#8A6A2E","#4E5C8C"];
 
@@ -841,6 +825,55 @@ function saveFile(){
   toast("Downloaded " + fname + " \u2014 replace your old copy with it");
 }
 
+/* ---- Data import / export ---- */
+function exportData(){
+  download(fileSlug() + "-data-" + todayISO() + ".json",
+    JSON.stringify(state, null, 2), "application/json;charset=utf-8");
+  toast("Data exported");
+}
+function extractWalletJSON(text){
+  var t = String(text || "").trim();
+  if (t.charAt(0) === "{"){
+    try { return JSON.parse(t); } catch(e){}
+  }
+  var m = t.indexOf('id="wallet-data"');
+  if (m !== -1){
+    var open = t.indexOf(">", m);
+    var close = t.indexOf(DATA_CLOSE, open);
+    if (open !== -1 && close !== -1){
+      try { return JSON.parse(t.slice(open + 1, close)); } catch(e){}
+    }
+  }
+  return null;
+}
+function validWallet(d){
+  return !!d && typeof d === "object" &&
+    Object.prototype.toString.call(d.categories) === "[object Array]" &&
+    Object.prototype.toString.call(d.cards) === "[object Array]";
+}
+function importData(file){
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(){
+    var data = extractWalletJSON(reader.result);
+    if (!validWallet(data)){
+      alert("Couldn't read wallet data from that file.\nUse a previous wallet HTML file or an exported wallet-data JSON.");
+      return;
+    }
+    if (!data.schemaVersion) data.schemaVersion = 1;
+    if (!data.walletName) data.walletName = state.walletName;
+    var msg = "Replace ALL current data (" + state.categories.length + " categories, " +
+      state.cards.length + " cards) with the imported data (" + data.categories.length +
+      " categories, " + data.cards.length + " cards)?\n\nThis cannot be undone within this session.";
+    if (!confirm(msg)) return;
+    state = data;
+    markDirty(); render();
+    toast("Imported \u2014 remember to Save file");
+  };
+  reader.onerror = function(){ alert("Could not read the selected file."); };
+  reader.readAsText(file);
+}
+
 /* ---- CSV export ---- */
 function csvCell(v){
   var s = String(v == null ? "" : v);
@@ -865,8 +898,7 @@ function exportCSV(){
 document.addEventListener("click", function(e){
   var t = e.target.closest("[data-act],[data-copy]");
   if (!t) {
-    // REMOVED: if (e.target === $("overlay")) closeSheet();
-    //This prevents accidental closing when clicking outside the form
+    if (e.target === $("overlay") && !$("card-form")) closeSheet();
     return;
   }
   if (t.hasAttribute("data-copy")){ copyText(t.getAttribute("data-copy"), t); return; }
@@ -886,7 +918,10 @@ document.addEventListener("submit", function(e){
   if (e.target.id === "card-form"){ e.preventDefault(); saveCardForm(e.target); }
 });
 document.addEventListener("keydown", function(e){
-  if (e.key === "Escape" && $("overlay").classList.contains("open")) closeSheet();
+  if (e.key === "Escape" && $("overlay").classList.contains("open")){
+    if ($("card-form") && !confirm("Discard the details you've entered?")) return;
+    closeSheet();
+  }
 });
 $("edit-toggle").addEventListener("click", function(){
   editing = !editing;
@@ -897,6 +932,12 @@ $("edit-toggle").addEventListener("click", function(){
 });
 $("save-btn").addEventListener("click", saveFile);
 $("export-csv-btn").addEventListener("click", exportCSV);
+$("export-data-btn").addEventListener("click", exportData);
+$("import-btn").addEventListener("click", function(){ $("import-input").click(); });
+$("import-input").addEventListener("change", function(){
+  importData(this.files && this.files[0]);
+  this.value = "";
+});
 $("add-cat-btn").addEventListener("click", addCategory);
 $("rename-wallet-btn").addEventListener("click", function(){
   var name = prompt("Wallet name:", state.walletName || "");
